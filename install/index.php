@@ -3,7 +3,18 @@
 	$step = (!empty($_GET['step'])) ? intval($_GET['step']) : 1;
 	$error = false;
 	$patch = substr(__DIR__, 0, -8);
+	
+	$php_version = '7.0.0';
+	$php_extensions = array (
+		'openssl',
+		'pdo',
+		'mbstring',
+		'tokenizer',
+		'JSON',
+		'cURL',
+	);
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" href="css.css">
@@ -27,47 +38,70 @@
 			<?php
 			break;
 		case 2: // системные требования
-			echo "<h1>PHP</h1>";
-			if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-				echo "PHP  версии 7.0.0 - &#10004;";
+			?>
+			<table>
+				<thead>
+					<tr>
+						<th>PHP версии <?php echo $php_version; ?> или выше </th>
+						<td>
+						<?php
+							if(version_compare(PHP_VERSION, $php_version) >= 0) {
+								echo "&#10004;";
+							}else{
+								$error = true;
+								echo "#10008;";
+							}
+						?>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						foreach($php_extensions as $extension){
+							echo "<tr><th>$extension</th><td>";
+								if(extension_loaded($extension)){
+									echo "&#10004;";
+								}else{
+									echo "&#10008;";
+									$error = true;
+								}
+							echo "</td></tr>";
+						}
+					?>
+				</tbody>
+			</table>
+			<br>
+			<table>
+				<thead>
+					<tr>
+						<th>Apache</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>mod_rewrite</th>
+						<td>
+							<?php
+									if(function_exists('apache_get_modules')){
+										echo "&#10004;";
+									}else{
+										echo "&#10008;";
+										$error = true;
+									}
+							?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<?php
+			if(!$error) {
+				echo '<p class="step"><a href="?step=3" class="button button-large">Вперёд!</a></p>';
 			}else{
-				$error = true;
-				echo "PHP  версии 7.0.0 - &#10008;";
+				echo "Вы сможете продолжить после того,как исправите ошибки";
 			}
-			echo "<h2>Расшинения PHP</h2>";
-			$extensions = array (
-				'openssl',
-				'pdo',
-				'mbstring',
-				'tokenizer',
-				'JSON',
-				'cURL',
-			);
-			foreach($extensions as $extension){
-				if(extension_loaded('cURL')){
-					echo "$extension - &#10004;";
-				}else{
-					echo "$extension - &#10008;";
-					$error = true;
-				}
-				echo '<br>';
-			}
-			echo "<h1>apache</h1>";
-			if(function_exists('apache_get_modules')){
-				echo "mod_rewrite - &#10004;";
-			}else{
-				echo "mod_rewrite - &#10008;";
-				$error = true;
-			}
-		
-		if(!$error) {
-			echo '<p class="step"><a href="?step=3" class="button button-large">Вперёд!</a></p>';
-		}else{
-			echo "Вы сможете продолжить после того,как исправите ошибки";
-		}
 			break;
 		case 3: // проверка прав на папки
-		
+		//todo сделать проверку существования папки doika
 			$folders = array (
 				'/doika/storage/framework/'     => '775',
 				'/doika/storage/logs/'          => '775',
