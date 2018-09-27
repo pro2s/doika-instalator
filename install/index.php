@@ -1,4 +1,5 @@
 <?php
+	error_reporting(E_ERROR | E_PARSE);
 	session_start();
 	$step = (!empty($_GET['step'])) ? intval($_GET['step']) : 1;
 	$error = false;
@@ -50,6 +51,11 @@
 			<table>
 				<thead>
 					<tr>
+						<th>PHP</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
 						<th>PHP версии <?php echo $php_version; ?> или выше </th>
 						<td>
 						<?php
@@ -62,8 +68,7 @@
 						?>
 						</td>
 					</tr>
-				</thead>
-				<tbody>
+
 					<?php
 						foreach($php_extensions as $extension){
 							echo "<tr><th>$extension</th><td>";
@@ -77,9 +82,6 @@
 						}
 					?>
 				</tbody>
-			</table>
-			<br>
-			<table>
 				<thead>
 					<tr>
 						<th>Apache</th>
@@ -189,10 +191,6 @@
 					echo '</ul>';
 					echo '<p>Если вы не знаете, что означают эти термины — возможно, стоит обратиться к хостинг-провайдеру.</p>';
 					echo '<p></p><p class="step"><a href="?step=4" onclick="javascript:history.go(-1);return false;" class="button button-large">Попробовать ещё раз</a></p>';
-
-					echo "Ошибка: Невозможно установить соединение с MySQL." ;
-					echo "Код ошибки errno: " . mysqli_connect_errno();
-					echo "Текст ошибки error: " . mysqli_connect_error();
 				}else{
 					echo "Усановка:<br>";
 					

@@ -68,7 +68,7 @@ a:focus {
     margin: 20px 0 15px;
 }
 
-.step a.button {
+.step a.button, .step input {
 	text-decoration: none;
 	background-color: #EEEEEE;
 	color: #333333;
@@ -95,6 +95,7 @@ a:focus {
     line-height: 28px;
 	padding: 2px 16px;
 	font-size: 15px;	
+	font: 400 13.3333px Arial;
 }
 table{
 	width:100%;
@@ -102,12 +103,13 @@ table{
 thead{
 	font-size: 20px;
 }
+tbody tr th{
+	padding-left: 20px;
+}
 th{
 	text-align: left;
 }
-td{
-	float:right;
-}
+
 p.error{
 	color:#c80811;
 }
