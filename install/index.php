@@ -13,6 +13,14 @@
 		'JSON',
 		'cURL',
 	);
+	$install_folder ='../doika/'; // папка установки дойки
+	$folders = array (
+		'storage/framework/'     => '775',
+		'storage/logs/'          => '775',
+		'bootstrap/cache/'       => '775',
+		'public/images/'       => '775'
+	);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,7 +28,7 @@
 <link rel="stylesheet" href="css.css">
 </head>
 <body>
-<p id="logo"><a href="https://it.falanster.by/" tabindex="-1">Doika</a></p>
+<p id="logo"><a href="http://doika.falanster.by/" tabindex="-1">Doika</a></p>
 <?php
 	switch ($step) {
 		case 1: // приветствие
@@ -97,30 +105,37 @@
 			if(!$error) {
 				echo '<p class="step"><a href="?step=3" class="button button-large">Вперёд!</a></p>';
 			}else{
-				echo "Вы сможете продолжить после того,как исправите ошибки";
+				echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
 			}
 			break;
 		case 3: // проверка прав на папки
-		//todo сделать проверку существования папки doika
-			$folders = array (
-				'/doika/storage/framework/'     => '775',
-				'/doika/storage/logs/'          => '775',
-				'/doika/bootstrap/cache/'       => '775',
-				'/doika/public/images/'       => '775'
-			);
-			foreach($folders as $folder => $permission){
-				echo '<br>';
-				 if(intval(substr(sprintf('%o', fileperms($patch . $folder)), -3)) >= intval($permission)){
-					 echo $folder . " - &#10004;";
-				 }else {
-					 echo $folder . " - &#10008;";
-					 $error = true;
-				 }
+			if (file_exists($install_folder)) {
+				?>
+				<table>
+					<tbody>
+						<?php
+							foreach($folders as $folder => $permission){
+								echo "<tr><th>$install_folder$folder</th><td>";
+									if(intval(substr(sprintf('%o', fileperms($install_folder. $folder)), -3)) >= intval($permission)){
+										echo "&#10004;";
+									}else{
+										echo "&#10008;";
+										$error = true;
+									}
+								echo "</td></tr>";
+							}
+						?>
+					</tbody>
+				</table>
+				<?php
+			}else{
+				echo "Папка $install_folder не существует. Попробуйте заново скачать и разархивировать <a href='https://github.com/cema93/doika-instalator/archive/master.zip' target='_blank'>архив</a> в корень вашего сайта. ";
+				$error = true;
 			}
 			if(!$error) {
 				echo '<p class="step"><a href="?step=4" class="button button-large">Вперёд!</a></p>';
 			}else{
-				echo "Вы сможете продолжить после того,как исправите ошибки";
+				echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
 			}
 
 			break;
