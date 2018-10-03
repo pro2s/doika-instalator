@@ -146,7 +146,7 @@
 	</style>
 </head>
 <body>
-<p id="logo"><a href="http://doika.falanster.by/" tabindex="-1">Doika</a></p>
+<p id="logo"><a href="https://doika.falanster.by/" target="_blank" tabindex="-1">Doika</a></p>
 <?php
 	switch ($step) {
 		case 1: // приветствие
