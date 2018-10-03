@@ -295,9 +295,10 @@
 			break;
 		case 5:
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-				$link = mysqli_connect($_POST['dbhost'], $_POST['uname'], $_POST['pwd'], $_POST['dbname']);
+				$mysqli = new mysqli($_POST['dbhost'], $_POST['uname'], $_POST['pwd'], $_POST['dbname']);
+				$mysqli->set_charset("utf8");
 
-				if (!$link) {
+				if ($mysqli->connect_errno) {
 					
 					$_SESSION['dbhost'] = $_POST['dbhost'];
 					$_SESSION['uname'] = $_POST['uname'];
@@ -316,8 +317,6 @@
 				}else{
 					echo "<h2>Установка</h2>";
 
-					$mysqli = new mysqli($_POST['dbhost'], $_POST['uname'], $_POST['pwd'], $_POST['dbname']);
-					$mysqli->set_charset("utf8");
 					$query = '';
 					$sqlScript = file($mysqlImportFilename);
 					foreach ($sqlScript as $line)	{
