@@ -312,7 +312,8 @@
 				}else{
 					echo "Усановка:<br>";
 					
-					$conn =new mysqli($_POST['dbhost'], $_POST['uname'], $_POST['pwd'], $_POST['dbname']);
+					$mysqli = new mysqli($_POST['dbhost'], $_POST['uname'], $_POST['pwd'], $_POST['dbname']);
+					$mysqli->set_charset("utf8");
 					$query = '';
 					$sqlScript = file($mysqlImportFilename);
 					foreach ($sqlScript as $line)	{
@@ -323,10 +324,11 @@
 						}
 						$query = $query . $line;
 						if ($endWith == ';') {
-							mysqli_query($conn,$query) or die('<div class="error-response sql-import-response">Problem in executing the SQL query <b>' . $query. '</b></div>');
+							mysqli_query($mysqli,$query) or die('<div class="error-response sql-import-response">Problem in executing the SQL query <b>' . $query. '</b></div>');
 							$query= '';		
 						}
 					}
+					$mysqli->close();
 					echo 'Файл $mysqlImportFilename успешно загружен в базу данных<br>';
 
 					$my_file = $install_folder.'.env';
