@@ -238,11 +238,11 @@
 					<tbody>
 						<?php
 							foreach($folders as $folder => $permission){
-								echo "<tr><th>$install_folder$folder</th><td>";
+								echo "<tr><th>$install_folder$folder <small>(требуемые права $permission)</small></th><td>";
 									if(intval(substr(sprintf('%o', fileperms($install_folder. $folder)), -3)) >= intval($permission)){
 										echo "&#10004;";
 									}else{
-										echo "&#10008;";
+										echo "&#10008; <small>текущие права ". intval(substr(sprintf('%o', fileperms($install_folder. $folder)), -3)) ."</small>";
 										$error = true;
 									}
 								echo "</td></tr>";
