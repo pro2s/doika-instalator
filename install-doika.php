@@ -1,27 +1,27 @@
 <?php
-	error_reporting(E_ERROR | E_PARSE);
-	session_start();
-	$step = (!empty($_GET['step'])) ? intval($_GET['step']) : 1;
-	$error = false;
-	$patch = substr(__DIR__, 0, -8);
-	
-	$php_version = '7.0.0';
-	$php_extensions = array (
-		'openssl',
-		'pdo',
-		'mbstring',
-		'tokenizer',
-		'JSON',
-		'cURL',
-	);
-	$install_folder ='doika/'; // папка установки дойки
-	$folders = array (
-		'storage/framework/'     => '775',
-		'storage/logs/'          => '775',
-		'bootstrap/cache/'       => '775',
-		'public/images/'         => '775'
-	);
-	$mysqlImportFilename ='doika.sql';
+    error_reporting(E_ERROR | E_PARSE);
+    session_start();
+    $step = (!empty($_GET['step'])) ? intval($_GET['step']) : 1;
+    $error = false;
+    $patch = substr(__DIR__, 0, -8);
+
+    $php_version = '7.0.0';
+    $php_extensions = [
+        'openssl',
+        'pdo',
+        'mbstring',
+        'tokenizer',
+        'JSON',
+        'cURL',
+    ];
+    $install_folder = 'doika/'; // папка установки дойки
+    $folders = [
+        'storage/framework/'     => '775',
+        'storage/logs/'          => '775',
+        'bootstrap/cache/'       => '775',
+        'public/images/'         => '775',
+    ];
+    $mysqlImportFilename = 'doika.sql';
 ?>
 <!DOCTYPE html>
 <html>
@@ -148,9 +148,9 @@
 <body>
 <p id="logo"><a href="https://doika.falanster.by/" target="_blank" tabindex="-1">Doika</a></p>
 <?php
-	switch ($step) {
-		case 1: // приветствие
-			?>
+    switch ($step) {
+        case 1: // приветствие
+            ?>
 			<h2>Добро пожаловать.</h2>
 			<p>Прежде чем мы начнём, потребуется информация о базе данных. Вот что вам необходимо знать до начала процедуры установки.</p>
 			<ol>
@@ -163,9 +163,9 @@
 			<p>Скорее всего, эти данные были предоставлены вашим хостинг-провайдером. Если у вас нет этой информации, свяжитесь с их службой поддержки. А если есть…</p>
 			<p class="step"><a href="?step=2" class="button button-large">Вперёд!</a></p>
 			<?php
-			break;
-		case 2: // системные требования
-			?>
+            break;
+        case 2: // системные требования
+            ?>
 			<h2>Системные требования</h2>
 			<table>
 				<thead>
@@ -178,28 +178,28 @@
 						<th>PHP версии <?php echo $php_version; ?> или выше </th>
 						<td>
 						<?php
-							if(version_compare(PHP_VERSION, $php_version) >= 0) {
-								echo "&#10004;";
-							}else{
-								$error = true;
-								echo "#10008;";
-							}
-						?>
+                            if (version_compare(PHP_VERSION, $php_version) >= 0) {
+                                echo '&#10004;';
+                            } else {
+                                $error = true;
+                                echo '#10008;';
+                            }
+                        ?>
 						</td>
 					</tr>
 
 					<?php
-						foreach($php_extensions as $extension){
-							echo "<tr><th>$extension</th><td>";
-								if(extension_loaded($extension)){
-									echo "&#10004;";
-								}else{
-									echo "&#10008;";
-									$error = true;
-								}
-							echo "</td></tr>";
-						}
-					?>
+                        foreach ($php_extensions as $extension) {
+                            echo "<tr><th>$extension</th><td>";
+                            if (extension_loaded($extension)) {
+                                echo '&#10004;';
+                            } else {
+                                echo '&#10008;';
+                                $error = true;
+                            }
+                            echo '</td></tr>';
+                        }
+                    ?>
 				</tbody>
 				<thead>
 					<tr>
@@ -211,59 +211,58 @@
 						<th>mod_rewrite</th>
 						<td>
 							<?php
-									if(function_exists('apache_get_modules')){
-										echo "&#10004;";
-									}else{
-										echo "&#10008;";
-										$error = true;
-									}
-							?>
+                                    if (function_exists('apache_get_modules')) {
+                                        echo '&#10004;';
+                                    } else {
+                                        echo '&#10008;';
+                                        $error = true;
+                                    }
+                            ?>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 			<?php
-			if(!$error) {
-				echo '<p class="step"><a href="?step=3" class="button button-large">Вперёд!</a></p>';
-			}else{
-				echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
-				echo '<p class="step"><a href="?step=2" class="button button-large">Повторить проверку</a></p>';
-			}
-			break;
-		case 3: // проверка прав на папки
-			if (file_exists($install_folder)) {
-				?>
+            if (!$error) {
+                echo '<p class="step"><a href="?step=3" class="button button-large">Вперёд!</a></p>';
+            } else {
+                echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
+                echo '<p class="step"><a href="?step=2" class="button button-large">Повторить проверку</a></p>';
+            }
+            break;
+        case 3: // проверка прав на папки
+            if (file_exists($install_folder)) {
+                ?>
 				<h2>Проверка проав доступа</h2>
 				<table>
 					<tbody>
 						<?php
-							foreach($folders as $folder => $permission){
-								echo "<tr><th>$install_folder$folder <small>(требуемые права $permission)</small></th><td>";
-									if(intval(substr(sprintf('%o', fileperms($install_folder. $folder)), -3)) >= intval($permission)){
-										echo "&#10004;";
-									}else{
-										echo "&#10008; <small>текущие права ". intval(substr(sprintf('%o', fileperms($install_folder. $folder)), -3)) ."</small>";
-										$error = true;
-									}
-								echo "</td></tr>";
-							}
-						?>
+                            foreach ($folders as $folder => $permission) {
+                                echo "<tr><th>$install_folder$folder <small>(требуемые права $permission)</small></th><td>";
+                                if (intval(substr(sprintf('%o', fileperms($install_folder.$folder)), -3)) >= intval($permission)) {
+                                    echo '&#10004;';
+                                } else {
+                                    echo '&#10008; <small>текущие права '.intval(substr(sprintf('%o', fileperms($install_folder.$folder)), -3)).'</small>';
+                                    $error = true;
+                                }
+                                echo '</td></tr>';
+                            } ?>
 					</tbody>
 				</table>
 				<?php
-			}else{
-				echo "Папка $install_folder не существует. Попробуйте заново скачать и разархивировать <a href='https://github.com/cema93/doika-instalator/archive/master.zip' target='_blank'>архив</a> в корень вашего сайта. ";
-				$error = true;
-			}
-			if(!$error) {
-				echo '<p class="step"><a href="?step=4" class="button button-large">Вперёд!</a></p>';
-			}else{
-				echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
-				echo '<p class="step"><a href="?step=3" class="button button-large">Повторить проверку</a></p>';
-			}
-			break;
-		case 4: // доступ к базе данных
-			?>
+            } else {
+                echo "Папка $install_folder не существует. Попробуйте заново скачать и разархивировать <a href='https://github.com/cema93/doika-instalator/archive/master.zip' target='_blank'>архив</a> в корень вашего сайта. ";
+                $error = true;
+            }
+            if (!$error) {
+                echo '<p class="step"><a href="?step=4" class="button button-large">Вперёд!</a></p>';
+            } else {
+                echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
+                echo '<p class="step"><a href="?step=3" class="button button-large">Повторить проверку</a></p>';
+            }
+            break;
+        case 4: // доступ к базе данных
+            ?>
 			<h2>Настройка подключения к MySQL</h2>
 			<form method="post" action="?step=5">
 				<p>Введите здесь информацию о подключении к базе данных. Если вы в ней не уверены, свяжитесь с хостинг-провайдером.</p>
@@ -285,58 +284,57 @@
 					</tr>
 					<tr>
 						<th scope="row"><label for="dbhost">Сервер базы данных</label></th>
-						<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo isset($_SESSION['dbhost']) ? $_SESSION['dbhost']: 'localhost'; ?>"></td>
+						<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo isset($_SESSION['dbhost']) ? $_SESSION['dbhost'] : 'localhost'; ?>"></td>
 						<td>Если <code>localhost</code> не работает, нужно узнать правильный адрес в службе поддержки хостинг-провайдера.</td>
 					</tr>
 				</tbody></table>
 				<p class="step"><input name="submit" type="submit" value="Проверить соединение и устновить" class="button button-large"></p>
 			</form>
 			<?php
-			break;
-		case 5:
-			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-				$mysqli = new mysqli($_POST['dbhost'], $_POST['uname'], $_POST['pwd'], $_POST['dbname']);
-				$mysqli->set_charset("utf8");
+            break;
+        case 5:
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $mysqli = new mysqli($_POST['dbhost'], $_POST['uname'], $_POST['pwd'], $_POST['dbname']);
+                $mysqli->set_charset('utf8');
 
-				if ($mysqli->connect_errno) {
-					
-					$_SESSION['dbhost'] = $_POST['dbhost'];
-					$_SESSION['uname'] = $_POST['uname'];
-					$_SESSION['pwd'] = $_POST['pwd'];
-					$_SESSION['dbname'] = $_POST['dbname'];
-					
-					echo '<h2>Ошибка установки соединения с базой данных</h2>';
-					echo '<p>Это значит, что либо имя пользователя и пароль неверны, либо нам не удалось связаться с сервером базы данных по адресу <code>'. $_POST['dbhost'] .'</code>. Возможно, сервер недоступен.</p>';
-					echo '<ul>';
-					echo '<li>Вы уверены, что указали правильное имя пользователя и пароль?</li>';
-					echo '<li>Вы уверены, что ввели правильное имя сервера?</li>';
-					echo '<li>Вы уверены, что сервер базы данных запущен?</li>';
-					echo '</ul>';
-					echo '<p>Если вы не знаете, что означают эти термины — возможно, стоит обратиться к хостинг-провайдеру.</p>';
-					echo '<p></p><p class="step"><a href="?step=4" onclick="javascript:history.go(-1);return false;" class="button button-large">Попробовать ещё раз</a></p>';
-				}else{
-					echo "<h2>Установка</h2>";
+                if ($mysqli->connect_errno) {
+                    $_SESSION['dbhost'] = $_POST['dbhost'];
+                    $_SESSION['uname'] = $_POST['uname'];
+                    $_SESSION['pwd'] = $_POST['pwd'];
+                    $_SESSION['dbname'] = $_POST['dbname'];
 
-					$query = '';
-					$sqlScript = file($mysqlImportFilename);
-					foreach ($sqlScript as $line)	{
-						$startWith = substr(trim($line), 0 ,2);
-						$endWith = substr(trim($line), -1 ,1);
-						if (empty($line) || $startWith == '--' || $startWith == '/*' || $startWith == '//') {
-							continue;
-						}
-						$query = $query . $line;
-						if ($endWith == ';') {
-							mysqli_query($mysqli,$query) or die('<div class="error-response sql-import-response">Problem in executing the SQL query <b>' . $query. '</b></div>');
-							$query= '';		
-						}
-					}
-					$mysqli->close();
-					echo 'Файл $mysqlImportFilename успешно загружен в базу данных<br>';
+                    echo '<h2>Ошибка установки соединения с базой данных</h2>';
+                    echo '<p>Это значит, что либо имя пользователя и пароль неверны, либо нам не удалось связаться с сервером базы данных по адресу <code>'.$_POST['dbhost'].'</code>. Возможно, сервер недоступен.</p>';
+                    echo '<ul>';
+                    echo '<li>Вы уверены, что указали правильное имя пользователя и пароль?</li>';
+                    echo '<li>Вы уверены, что ввели правильное имя сервера?</li>';
+                    echo '<li>Вы уверены, что сервер базы данных запущен?</li>';
+                    echo '</ul>';
+                    echo '<p>Если вы не знаете, что означают эти термины — возможно, стоит обратиться к хостинг-провайдеру.</p>';
+                    echo '<p></p><p class="step"><a href="?step=4" onclick="javascript:history.go(-1);return false;" class="button button-large">Попробовать ещё раз</a></p>';
+                } else {
+                    echo '<h2>Установка</h2>';
 
-					$my_file = $install_folder.'.env';
-					$handle = fopen($my_file, 'w');
-					$data = "APP_NAME=Doika
+                    $query = '';
+                    $sqlScript = file($mysqlImportFilename);
+                    foreach ($sqlScript as $line) {
+                        $startWith = substr(trim($line), 0, 2);
+                        $endWith = substr(trim($line), -1, 1);
+                        if (empty($line) || $startWith == '--' || $startWith == '/*' || $startWith == '//') {
+                            continue;
+                        }
+                        $query = $query.$line;
+                        if ($endWith == ';') {
+                            mysqli_query($mysqli, $query) or die('<div class="error-response sql-import-response">Problem in executing the SQL query <b>'.$query.'</b></div>');
+                            $query = '';
+                        }
+                    }
+                    $mysqli->close();
+                    echo 'Файл $mysqlImportFilename успешно загружен в базу данных<br>';
+
+                    $my_file = $install_folder.'.env';
+                    $handle = fopen($my_file, 'w');
+                    $data = "APP_NAME=Doika
 APP_ENV=production
 APP_KEY=base64:8ObMpr3jB1o5SQ3az2pqXo9tSPGAZOponr4eHBoDs9Y=
 
@@ -346,40 +344,40 @@ DB_PORT=3306
 DB_DATABASE={$_POST['dbname']}
 DB_USERNAME={$_POST['uname']}
 DB_PASSWORD={$_POST['pwd']}";
-					fwrite($handle, $data);
-					fclose($handle);
+                    fwrite($handle, $data);
+                    fclose($handle);
 
-					echo "Файл конфигурации создан<br>";
-					if(!$error){
-						echo '<meta http-equiv="refresh" content="2;URL=?step=6" />';
-					}else{
-						echo "<p class='error'>Что-то прошло не так.</p>";
-					}
-				}
-			}
+                    echo 'Файл конфигурации создан<br>';
+                    if (!$error) {
+                        echo '<meta http-equiv="refresh" content="2;URL=?step=6" />';
+                    } else {
+                        echo "<p class='error'>Что-то прошло не так.</p>";
+                    }
+                }
+            }
 
-			break;
-		case 6:
-			echo '<h2>Поздравляем!</h2>';
-			echo '<p>Doika установлена. Желаем успешной работы!</p>';
-			echo '<table class="form-table install-success">';
-			echo '	<tbody><tr>';
-			echo '		<th>Имя пользователя</th>';
-			echo '		<td>sample@sample.com</td>';
-			echo '	</tr>';
-			echo '	<tr>';
-			echo '		<th>Пароль</th>';
-			echo '		<td>123456</p>';
-			echo '		</td>';
-			echo '	</tr>';
-			echo '</tbody></table>';
-			echo '<p class="step"><a href="/doika/login" class="button button-large">Войти</a></p>';
+            break;
+        case 6:
+            echo '<h2>Поздравляем!</h2>';
+            echo '<p>Doika установлена. Желаем успешной работы!</p>';
+            echo '<table class="form-table install-success">';
+            echo '	<tbody><tr>';
+            echo '		<th>Имя пользователя</th>';
+            echo '		<td>sample@sample.com</td>';
+            echo '	</tr>';
+            echo '	<tr>';
+            echo '		<th>Пароль</th>';
+            echo '		<td>123456</p>';
+            echo '		</td>';
+            echo '	</tr>';
+            echo '</tbody></table>';
+            echo '<p class="step"><a href="/doika/login" class="button button-large">Войти</a></p>';
 
-			session_destroy();
-			unlink('install-doika.php');
-			unlink('doika.sql');
-			break;
-	}
+            session_destroy();
+            unlink('install-doika.php');
+            unlink('doika.sql');
+            break;
+    }
 ?>
 </body>
 </html>
