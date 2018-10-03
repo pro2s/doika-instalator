@@ -1,7 +1,7 @@
 <?php
     error_reporting(E_ERROR | E_PARSE);
     session_start();
-    $step = (!empty($_GET['step'])) ? intval($_GET['step']) : 1;
+    $step = (! empty($_GET['step'])) ? intval($_GET['step']) : 1;
     $error = false;
     $patch = substr(__DIR__, 0, -8);
 
@@ -223,7 +223,7 @@
 				</tbody>
 			</table>
 			<?php
-            if (!$error) {
+            if (! $error) {
                 echo '<p class="step"><a href="?step=3" class="button button-large">Вперёд!</a></p>';
             } else {
                 echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
@@ -254,7 +254,7 @@
                 echo "Папка $install_folder не существует. Попробуйте заново скачать и разархивировать <a href='https://github.com/cema93/doika-instalator/archive/master.zip' target='_blank'>архив</a> в корень вашего сайта. ";
                 $error = true;
             }
-            if (!$error) {
+            if (! $error) {
                 echo '<p class="step"><a href="?step=4" class="button button-large">Вперёд!</a></p>';
             } else {
                 echo "<p class='error'>Вы сможете продолжить после того,как исправите ошибки</p>";
@@ -348,7 +348,7 @@ DB_PASSWORD={$_POST['pwd']}";
                     fclose($handle);
 
                     echo 'Файл конфигурации создан<br>';
-                    if (!$error) {
+                    if (! $error) {
                         echo '<meta http-equiv="refresh" content="2;URL=?step=6" />';
                     } else {
                         echo "<p class='error'>Что-то прошло не так.</p>";
