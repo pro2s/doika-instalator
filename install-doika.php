@@ -9,30 +9,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style><?php include __DIR__ . '/install-doika/style.css'; ?></style>
+<style><?php include __DIR__.'/install-doika/style.css'; ?></style>
 </head>
 <body>
 <p id="logo"><a href="https://doika.falanster.by/" target="_blank" tabindex="-1">Doika</a></p>
 <?php
     switch ($step) {
         case 1: // приветствие
-            include __DIR__ . '/install-doika/steps/hello.html';
+            include __DIR__.'/install-doika/steps/hello.html';
             break;
         case 2: // системные требования
-            include __DIR__ . '/install-doika/steps/system-requirements.php';
-            $nextStep = "?step=3";
-            $repeatStep = "?step=2";
-            include __DIR__ . '/install-doika/next-step.php';
+            include __DIR__.'/install-doika/steps/system-requirements.php';
+            $nextStep = '?step=3';
+            $repeatStep = '?step=2';
+            include __DIR__.'/install-doika/next-step.php';
             break;
         case 3: // проверка прав на папки
-            include __DIR__ . '/install-doika/steps/folder-permisson.php';
-            $nextStep = "?step=4";
-            $repeatStep = "?step=3";
-            include __DIR__ . '/install-doika/next-step.php';
+            include __DIR__.'/install-doika/steps/folder-permisson.php';
+            $nextStep = '?step=4';
+            $repeatStep = '?step=3';
+            include __DIR__.'/install-doika/next-step.php';
             break;
         case 4: // доступ к базе данных
-            $action = "?step=5";
-            include __DIR__ . '/install-doika/steps/db-form.php';
+            $action = '?step=5';
+            include __DIR__.'/install-doika/steps/db-form.php';
             break;
         case 5:
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -46,7 +46,7 @@
                     $_SESSION['dbname'] = $_POST['dbname'];
 
                     $action = '?step=4';
-                    include __DIR__ . '/install-doika/db-error.php';
+                    include __DIR__.'/install-doika/db-error.php';
                 } else {
                     echo '<h2>Установка</h2>';
 
@@ -93,7 +93,7 @@ DB_PASSWORD={$_POST['pwd']}";
 
             break;
         case 6:
-            include __DIR__ . '/install-doika/steps/finish.html';
+            include __DIR__.'/install-doika/steps/finish.html';
 
             session_destroy();
             unlink('install-doika.php');

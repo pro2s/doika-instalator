@@ -1,27 +1,26 @@
 <?php
-    $folders = array (
+    $folders = [
         'storage/framework/'     => '775',
         'storage/logs/'          => '775',
         'bootstrap/cache/'       => '775',
-        'public/images/'         => '775'
-    );
+        'public/images/'         => '775',
+    ];
     if (file_exists($install_folder)) {
         ?>
         <h2>Проверка проав доступа</h2>
         <table>
             <tbody>
                 <?php
-                    foreach ($folders as $folder => $permission) { 
-                        echo "<tr><th>$install_folder$folder <small>(требуемые права $permission)</small></th><td>"; 
-                        if (intval(substr(sprintf('%o', fileperms($install_folder.$folder)), -3)) >= intval($permission)) { 
-                            echo '&#10004;'; 
-                        } else { 
-                            echo '&#10008; <small>текущие права '.intval(substr(sprintf('%o', fileperms($install_folder.$folder)), -3)).'</small>'; 
-                            $error = true; 
-                        } 
-                        echo '</td></tr>'; 
-                    } 
-		?> 
+                    foreach ($folders as $folder => $permission) {
+                        echo "<tr><th>$install_folder$folder <small>(требуемые права $permission)</small></th><td>";
+                        if (intval(substr(sprintf('%o', fileperms($install_folder.$folder)), -3)) >= intval($permission)) {
+                            echo '&#10004;';
+                        } else {
+                            echo '&#10008; <small>текущие права '.intval(substr(sprintf('%o', fileperms($install_folder.$folder)), -3)).'</small>';
+                            $error = true;
+                        }
+                        echo '</td></tr>';
+                    } ?> 
             </tbody>
         </table>
         <?php
